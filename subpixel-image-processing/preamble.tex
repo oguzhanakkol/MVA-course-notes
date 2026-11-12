@@ -1,0 +1,103 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,twoside,
+            inner=20mm,textwidth=135mm,
+            marginparwidth=34mm,marginparsep=5mm,
+            top=24mm,bottom=22mm,headheight=14pt,headsep=7mm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{marginfix,eso-pic,fancyhdr,enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\graphicspath{{figures/}}
+\usepackage{svg}
+\setsvg{inkscapelatex=false}
+\svgpath{{figures/}}
+\usepackage[hidelinks]{hyperref}
+\usepackage[french,nameinlink]{cleveref}
+\usepackage{listings}
+\lstset{language=Python,basicstyle=\ttfamily\footnotesize,columns=fullflexible,
+        keywordstyle=\color{NavyBlue},commentstyle=\color{gray},
+        breaklines=true,frame=l,framerule=0.4pt,xleftmargin=4pt}
+
+% French captions
+\addto\captionsfrench{\renewcommand{\proofname}{Démonstration}}
+
+\newlength{\extraW}\setlength{\extraW}{\dimexpr\marginparwidth+\marginparsep\relax}
+\newlength{\wideW}\setlength{\wideW}{\dimexpr\textwidth+\extraW\relax}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{\nouppercase{\leftmark}}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhfoffset[LE]{\extraW}
+\fancyhfoffset[RO]{\extraW}
+
+\setlength{\marginparpush}{6pt}
+\newcommand{\sidefont}{\scriptsize\linespread{1.05}\selectfont\raggedright}
+\newcommand{\side}[1]{\marginpar{\sidefont #1}}
+\newcommand{\simple}[1]{\side{\textcolor{NavyBlue}{\textsc{En bref.}} #1}}
+\newcommand{\prof}[1]{\side{\textcolor{BrickRed}{\textsc{Prof.}} #1}}
+
+\newif\ifmrule \mrulefalse
+\newlength{\mrulex}\newlength{\mruley}\newlength{\mrulel}
+\newlength{\mruleskip}\setlength{\mruleskip}{16mm}
+\makeatletter
+\newcommand{\mrulecut}[1]{\global\@namedef{mrulecut@#1}{}}
+\makeatother
+\AddToShipoutPictureBG*{%
+  \ifmrule
+    \ifodd\value{page}
+      \setlength{\mrulex}{\dimexpr 1in+\oddsidemargin+\textwidth+0.5\marginparsep\relax}%
+    \else
+      \setlength{\mrulex}{\dimexpr 1in+\evensidemargin-0.5\marginparsep\relax}%
+    \fi
+    \setlength{\mruley}{\dimexpr\paperheight-1in-\topmargin-\headheight-\headsep-\textheight\relax}%
+    \setlength{\mrulel}{\textheight}%
+    \expandafter\ifx\csname mrulecut@\thepage\endcsname\relax\else
+      \addtolength{\mrulel}{-\mruleskip}\fi
+    \AtPageLowerLeft{\put(\LenToUnit{\mrulex},\LenToUnit{\mruley}){%
+      \color{black!55}\rule{0.4pt}{\mrulel}}}%
+  \fi}
+
+% lectures
+\makeatletter
+\newcommand{\lecture}[2]{%
+  \clearpage
+  \refstepcounter{section}%
+  \phantomsection
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#2}%
+  \markboth{\thesection\ #2}{\thesection\ #2}%
+  \noindent
+  \protected@write\@auxout{}{\string\mrulecut{\thepage}}%
+  \ifodd\value{page}\else\hspace*{-\extraW}\fi
+  \parbox[t][\mruleskip][t]{\wideW}{%
+    \raggedright
+    {\Large\bfseries\thesection\quad #2\hfill
+     \normalfont\small\itshape #1\par}%
+    \vspace{1.5mm}\hrule height 0.6pt}%
+  \par}
+\makeatother
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{corollary}[theorem]{Corollaire}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Définition}
+\newtheorem{example}[theorem]{Exemple}
+\newtheorem{exercise}{Exercice}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remarque}
+
+\crefname{theorem}{théorème}{théorèmes}         \Crefname{theorem}{Théorème}{Théorèmes}
+\crefname{proposition}{proposition}{propositions} \Crefname{proposition}{Proposition}{Propositions}
+\crefname{lemma}{lemme}{lemmes}                 \Crefname{lemma}{Lemme}{Lemmes}
+\crefname{corollary}{corollaire}{corollaires}   \Crefname{corollary}{Corollaire}{Corollaires}
+\crefname{definition}{définition}{définitions}  \Crefname{definition}{Définition}{Définitions}
+\crefname{example}{exemple}{exemples}           \Crefname{example}{Exemple}{Exemples}
+\crefname{exercise}{exercice}{exercices}        \Crefname{exercise}{Exercice}{Exercices}

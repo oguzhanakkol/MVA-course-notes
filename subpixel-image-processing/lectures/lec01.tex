@@ -1,0 +1,324 @@
+\lecture{2 octobre 2026}{Formation et représentation des images numériques}
+
+\subsection*{Organisation du cours}
+Cours \emph{Subpixel Image Processing} (imagerie sous-pixellique), Lionel Moisan, \nolinkurl{lionel.moisan@u-paris.fr}. Page du cours : \nolinkurl{www.mi.parisdescartes.fr/~moisan/mva/}.
+\begin{itemize}
+  \item 8 séances : cours de 14h00 à 16h30 (2h30), puis TD/TP de 16h45 à 18h45 (2h).
+  \item Examen le 11 décembre (3h).
+  \item Note finale $=A+B$, où $A$ (sur $4$) est le contrôle continu (chaque devoir maison est noté sur $1$, on retient les $4$ meilleures notes) et $B$ (sur $16$) la note d'examen.
+  \item Devoirs maison à rendre au début du cours, selon trois modalités : (1) tout papier ; (2) tout fichier (un seul PDF) ; (3) combinaison de (1) et (2).
+\end{itemize}
+
+\subsection{Le modèle de caméra sténopé (\emph{pinhole camera})}
+La caméra sténopé (ou \emph{camera obscura}, \og tête d'épingle\fg{}) est constituée d'une paroi opaque percée d'un trou minuscule situé sur l'axe optique~: seuls les rayons passant par ce trou, le \emph{centre optique} $O=(0,0,0)$, atteignent le plan image. Attention~: le phénomène de diffraction n'est pas pris en compte par ce modèle géométrique (voir la section suivante).
+
+\simple{La lumière est une onde : en traversant un trou très petit, elle s'étale au lieu d'aller tout droit. Plus le trou est petit, plus l'image est floue (tache d'Airy).}
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.85\linewidth]{figures/lec01/fig-camera-obscura}
+  \caption{Caméra sténopé (\emph{camera obscura}) : l'image est renversée.}\label{fig:camera-obscura}
+\end{figure}
+
+\subsubsection{(A) Projection perspective.}
+Un point $M=(X,Y,Z)$ de la scène, avec $Z>0$, se projette en $p=(x,y,f)$, intersection de la droite $(OM)$ avec le plan image $\{z=f\}$ (plan pseudo-focal). Par le théorème de Thalès,
+\[
+  \frac{x}{f}=\frac{X}{Z}\quad\Longrightarrow\quad x=f\,\frac{X}{Z},\qquad y=f\,\frac{Y}{Z}.
+\]
+Le plan focal ($z=-f$) fournit la même image renversée~; on travaille avec le plan image, qui donne l'image non renversée.
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.8\linewidth]{figures/lec01/fig-perspective-3d}
+  \caption{Projection perspective : le point $M$ est envoyé sur $p=(x,y,f)$.}\label{fig:persp-3d}
+\end{figure}
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.85\linewidth]{figures/lec01/fig-perspective-geometry}
+
+  \caption{Coupe dans un plan contenant l'axe optique : $x/f=X/Z$.}\label{fig:persp-coupe}
+\end{figure}
+
+\begin{definition}[Projection perspective]\label{def:persp}
+  \simple{Tous les points d'une même demi-droite issue de $O$ ont la même image à cause du scaling par $\lambda \Rightarrow $  $F(\lambda X, \lambda Y, \lambda Z) = (f\frac{X}{Z} , f\frac{Y}{Z})$.}
+  Soit $f>0$ la distance focale. La \emph{projection perspective} est l'application
+  \[
+    F:\RR^2\times\RR_+^{*}\to\RR^2,\qquad F(X,Y,Z)=\Bigl(f\,\frac{X}{Z},\,f\,\frac{Y}{Z}\Bigr).
+  \]
+\end{definition}
+
+\simple{Donc $F$ n'est pas injective. Il est impossible de retenir le nuage des points depuis un seul image. On ne sait que sur quel rayon il se trouve. (principe d'occlusion)}
+
+\begin{definition}[Image géométrique]\label{def:imgeo}
+  \simple{L'image idéale~: pour chaque direction, l'intensité du premier point de la scène rencontré.}
+  L'\emph{image géométrique} (objet idéal) d'une scène est la fonction $u:\RR^2\to\RR_+$ (intensité) définie par~: $u(x,y)$ est l'intensité émise par le point $(X,Y,Z)$ de la source tel que $(x,y)=F(X,Y,Z)$ avec $Z$ \textbf{minimal} (\emph{principe d'occlusion}).
+\end{definition}
+
+En général, $u$ est discontinue. Selon le capteur, $u$ prend ses valeurs dans~:
+\begin{itemize}
+  \item $\RR_+$ (intensité, niveaux de gris)~;
+  \item $\RR_+^3$ (RVB), pour le spectre visible $400$--$800$\,nm du violet au rouge~;
+  \item $\RR_+^n$ avec $n=10$ à $20$ (caméras multispectrales) ou $n=20$ à $1000$ (hyperspectral).
+\end{itemize}
+
+\paragraph{(B) Projection d'un plan.}
+Soit $P\subset\RR^3$ un plan défini par un point $M_0=(X_0,Y_0,Z_0)\in P$ et une base (affine) $(U,V)$ libre de $\RR^3$~: tout $M\in P$ s'écrit de façon unique $M=M_0+xU+yV$, soit
+\[
+  X=X_0+xU_x+yV_x,\quad Y=Y_0+xU_y+yV_y,\quad Z=Z_0+xU_z+yV_z .
+\]
+Le point $M$ se projette en $p=(x',y')$ avec ($Z>0$)
+\[
+  x'=f\,\frac{X}{Z}=f\,\frac{X_0+xU_x+yV_x}{Z_0+xU_z+yV_z},\qquad
+  y'=f\,\frac{Y}{Z}=f\,\frac{Y_0+xU_y+yV_y}{Z_0+xU_z+yV_z}.
+\]
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.65\linewidth]{figures/lec01/fig-plane-param}
+  \caption{Paramétrisation d'un plan $P$ : $M=M_0+xU+yV$.}\label{fig:plane-param}
+\end{figure}
+
+\begin{proposition}[Homographie]\label{prop:homographie}
+  \simple{Une photo d'un plan est le plan original déformé par une homographie.}
+  Supposons $O\notin P$ et choisissons $M_0\in P$ avec $Z_0\neq0$.
+  Alors la projection perspective de $P$ induit, sur $D=\{(x,y):Z_0+xU_z+yV_z>0\}\subset\RR^2$, la transformation homographique (ou \emph{homographie})
+  \[
+    (x,y)\longmapsto\Bigl(\frac{ax+by+c}{dx+ey+1},\;\frac{a'x+b'y+c'}{dx+ey+1}\Bigr),
+  \]
+  décrite par $8$ paramètres, identifiables à partir de $4$ points en position générale (trois quelconques non alignés) et de leurs images.
+
+\simple{Ces équations sont linéaires par rapport aux 8 inconnues ; ainsi, 4 points donnent 8 équations à 8 inconnues. Le système a une solution unique lorsque trois des quatre points ne sont pas alignés. - \textit{Hartley-Zisserman}}
+
+\end{proposition}
+
+\begin{proof}
+  Diviser numérateur et dénominateur par $Z_0$ donne la forme annoncée avec $a=fU_x/Z_0$, $b=fV_x/Z_0$, $c=fX_0/Z_0$, $a'=fU_y/Z_0$, $b'=fV_y/Z_0$, $c'=fY_0/Z_0$, $d=U_z/Z_0$, $e=V_z/Z_0$.
+\end{proof}
+
+
+\paragraph{Cas particulier.}
+Lorsque $Z_0\to+\infty$ avec $f/Z_0$ \textbf{constant}, la quantité $f/Z$ est (approximativement) constante sur la partie utile du plan.
+
+\simple{À titre d'exemple de transformation affine : les voies ferrées ne conservent pas leur forme, mais leurs lignes parallèles lorsqu'on les observe à l'horizon. }
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.65\linewidth]{figures/lec01/fig-homography-affine}
+  \caption{(a) Homographie (plan quelconque). (b) Transformation affine (plan à l'infini).}\label{fig:homo-affine}
+\end{figure}
+
+\begin{proposition}[Plan à l'infini]\label{prop:affine}
+  \simple{Vu de loin, la déformation d'un plan est affine~: un rectangle devient un parallélogramme.}
+  La projection perspective d'un plan à l'infini induit une transformation affine (ou \og affinité\fg{})
+  \[
+    D\subset\RR^2\to\RR^2,\qquad (x,y)\longmapsto(ax+by+c,\;a'x+b'y+c'),
+  \]
+  décrite par $6$ paramètres, identifiables à partir de $3$ points en position générale (non alignés) et de leurs images.
+\end{proposition}
+
+\begin{proof}
+  Dans les formules précédentes, $f/Z_0$ est constant et $d=U_z/Z_0$, $e=V_z/Z_0$ tendent vers $0$~: le dénominateur vaut $1$ et il reste $6$ coefficients.
+\end{proof}
+
+\subsection{Tache optique (\emph{point spread function})}
+
+\simple{$f(x)$ est la luminosité au point $x$ : c'est l'image géométrique $u$ de la définition~\ref{def:imgeo}, ou plus tard le noyau de flou.}
+
+\paragraph{(A) Transformée de Fourier, cadre $L^1$.}
+Soit $f\in L^1(\RR^d)$ (dans le cours, $d=2$ pour les images).
+
+
+\begin{definition}[Transformée de Fourier sur $L^1$]\label{def:tf-l1}
+  \simple{On décompose $f$ en ondes $e^{i\ps{x}{\xi}}$ ; $\hf{f}(\xi)$ mesure la part de la fréquence $\xi$.}
+  La \emph{transformée de Fourier} de $f\in L^1(\RR^d)$ est la fonction
+  \[
+    \hf{f}:\RR^d\to\CC,\qquad \hf{f}(\xi)=\int_{\RR^d}f(x)\,e^{-i\ps{x}{\xi}}\,\dd x .
+  \]
+\end{definition}
+L'intégrale converge pour tout $\xi$, car $\abs{f(x)e^{-i\ps{x}{\xi}}}=\abs{f(x)}$ est intégrable.
+
+\prof{Les physiciens n'aiment pas la définition sur $L^1$ : ils préfèrent $L^2$ (énergie). On peut quand même la définir dans $L^1$.}
+
+\begin{proposition}[Continuité et décroissance]\label{prop:riemann-lebesgue}
+  \simple{Le spectre d'une fonction intégrable est continu et s'éteint aux hautes fréquences.}
+  Si $f\in L^1(\RR^d)$, alors $\hf{f}$ est continue et
+  \[
+    \lim_{\abs{\xi}\to+\infty}\hf{f}(\xi)=0 .
+  \]
+\end{proposition}
+
+\begin{remark}
+  Même pour $f\in L^1$, on n'a pas $\hf{f}\in L^1$ en général : si $f=\mathbf 1_{[-1,1]}$ (cas $d=1$), alors $\hf{f}(\xi)=2\sin\xi/\xi$ tend vers $0$ mais n'est pas intégrable.
+\end{remark}
+
+\begin{theorem}[Formule d'inversion]\label{thm:inversion}
+  \simple{Si l'on connaît le poids $\hf{f}(\xi)$ de chaque onde, on reconstruit $f$ en les additionnant toutes.}
+  Soit $f\in L^1(\RR^d)$ telle que $\hf{f}\in L^1(\RR^d)$. Alors
+  \[
+    f(x)=\frac{1}{(2\pi)^d}\int_{\RR^d}\hf{f}(\xi)\,e^{+i\ps{x}{\xi}}\,\dd\xi \qquad \text{pour presque tout } x,
+  \]
+  le membre de droite étant noté $\mathcal{F}^{-1}(\hf{f})(x)$.
+\end{theorem}
+
+\side{Formule d'analyse : $f\mapsto\hf{f}$. Formule de synthèse : $\hf{f}\mapsto f$ (inversion). Même vocabulaire pour le tableau des quatre cadres.}
+
+\begin{remark}
+  Le membre de droite est continu en $x$ : si $\hf{f}\in L^1$, alors $f$ est presque partout égale à une fonction continue. En particulier $\hf{\mathbf 1_{[-1,1]}}\notin L^1$.
+\end{remark}
+
+\begin{definition}[Espace de Schwartz]\label{def:schwartz}
+  \simple{Fonctions lisses qui s'annulent à l'infini plus vite que toute puissance de $1/\abs{x}$, ainsi que toutes leurs dérivées.}
+  L'\emph{espace de Schwartz} est
+  \[
+    \Schw(\RR^d)=\Bigl\{f:\RR^d\to\CC,\ f\in C^\infty,\ \forall\alpha,\beta\in\NN^d,\ x^\beta\,\partial^\alpha f(x)\xrightarrow[\abs{x}\to+\infty]{}0\Bigr\},
+  \]
+  où $\partial^\alpha=\partial_1^{\alpha_1}\cdots\partial_d^{\alpha_d}$ et $x^\beta=x_1^{\beta_1}\cdots x_d^{\beta_d}$.
+\end{definition}
+
+\begin{proposition}\label{prop:schwartz-tf}
+  \simple{La transformée d'une fonction de Schwartz est encore de Schwartz : la formule d'inversion y marche toujours.}
+  Si $f\in\Schw(\RR^d)$, alors $\hf{f}\in\Schw(\RR^d)$ et $f=\mathcal{F}^{-1}(\hf{f})$ partout. L'application $f\mapsto\hf{f}$ est un isomorphisme de $\Schw(\RR^d)$, qui se prolonge par continuité en un isomorphisme de $L^2(\RR^d)$ ($\Schw(\RR^d)$ est dense dans $L^2(\RR^d)$).
+\end{proposition}
+
+\prof{La transformée de Fourier diagonalise l'opérateur de convolution.}
+
+\begin{definition}[Convolution]\label{def:conv}
+  \simple{On fait une moyenne de $f$ pondérée par le noyau $g$ : c'est un flou.}
+  Soient $f,g\in L^1(\RR^d)$. Leur \emph{convolée} est
+  \[
+    (f*g)(x)=\int_{\RR^d}f(y)\,g(x-y)\,\dd y ,
+  \]
+  définie pour presque tout $x$, et $f*g\in L^1(\RR^d)$ avec $\norm{f*g}_1\le\norm{f}_1\norm{g}_1$.
+\end{definition}
+
+\begin{theorem}[Transformée de Fourier et convolution]\label{thm:conv}
+  \simple{Floutter par $g$ revient à multiplier chaque fréquence de $f$ par $\hf{g}(\xi)$.}
+  Si $f,g\in L^1(\RR^d)$, alors pour tout $\xi\in\RR^d$,
+  \[
+    \widehat{f*g}(\xi)=\hf{f}(\xi)\,\hf{g}(\xi).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \emph{Échange des intégrales.} Comme $\iint\abs{f(y)}\abs{g(x-y)}\,\dd y\,\dd x=\norm{f}_1\norm{g}_1<\infty$, le théorème de Fubini s'applique à $\widehat{f*g}(\xi)=\iint f(y)g(x-y)e^{-i\ps{x}{\xi}}\,\dd y\,\dd x$.
+  \emph{Changement de variable.} Avec $x=y+z$ et $e^{-i\ps{y+z}{\xi}}=e^{-i\ps{y}{\xi}}e^{-i\ps{z}{\xi}}$, l'intégrale double se factorise en $\hf{f}(\xi)\hf{g}(\xi)$.
+\end{proof}
+
+\begin{proposition}[Transformée d'un produit]\label{prop:produit}
+  Sous des hypothèses convenables sur $f$ et $g$,
+  \[
+    \widehat{f\cdot g}=\frac{1}{(2\pi)^d}\,\hf{f}*\hf{g}.
+  \]
+\end{proposition}
+
+\paragraph{Les quatre cadres de la transformée de Fourier.} \hfill
+
+\simple{Signal périodique $\Leftrightarrow$ spectre discret ; signal échantillonné $\Leftrightarrow$ spectre périodique.}
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|p{19mm}|p{50mm}|p{50mm}|}
+  \hline
+  Cadre & Analyse $\mathcal{F}$ & Synthèse $\mathcal{F}^{-1}$ \\ \hline
+  $f:\RR\to\CC$
+    & $f\in L^1(\RR)$, $\hf{f}:\RR\to\CC$
+    & si $\hf{f}\in L^1(\RR)$ (égalité p.p.) \\
+    & $\displaystyle\hf{f}(\xi)=\int_{-\infty}^{+\infty}f(x)\,e^{-ix\xi}\,\dd x$
+    & $\displaystyle f(x)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}\hf{f}(\xi)\,e^{+ix\xi}\,\dd\xi$ \\ \hline
+  $f:\RR\to\CC$, $2\pi$-périodique
+    & $f\in L^1([-\pi,\pi])$, $\hf{f}:\ZZ\to\CC$
+    & si $\hf{f}\in\ell^1(\ZZ)$, par ex. (égalité p.p.) \\
+    & $\displaystyle\hf{f}(n)=\int_{-\pi}^{\pi}f(x)\,e^{-inx}\,\dd x$
+    & $\displaystyle f(x)=\frac{1}{2\pi}\sum_{n\in\ZZ}\hf{f}(n)\,e^{+inx}$ \\ \hline
+  $f:\ZZ\to\CC$
+    & $f\in\ell^1(\ZZ)$, $\hf{f}:\RR\to\CC$ $2\pi$-périodique
+    & si $\hf{f}\in L^1([-\pi,\pi])$ \\
+    & $\displaystyle\hf{f}(\xi)=\sum_{n\in\ZZ}f(n)\,e^{-in\xi}$
+    & $\displaystyle f(n)=\frac{1}{2\pi}\int_{-\pi}^{\pi}\hf{f}(\xi)\,e^{+in\xi}\,\dd\xi$ \\ \hline
+  $f:\ZZ\to\CC$, $N$-périodique
+    & somme sur une période quelconque
+    & somme sur une période \\
+    & $\displaystyle\hf{f}(p)=\sum_{n=0}^{N-1}f(n)\,e^{-2i\pi np/N}$
+    & $\displaystyle f(n)=\frac{1}{N}\sum_{p=0}^{N-1}\hf{f}(p)\,e^{+2i\pi np/N}$ \\ \hline
+\end{tabular}
+\caption{Analyse et synthèse dans les quatre cadres.}\label{tab:fourier-cadres}
+\end{table}
+
+\subsubsection{(B) Diffraction.}
+Le modèle sténopé est purement géométrique ; la diffraction le corrige en floutant l'image géométrique $u$ par un noyau qui dépend de la pupille de l'instrument.
+
+\begin{theorem}[Diffraction]\label{thm:diffraction}
+  \simple{L'image réelle est l'image idéale floutée par un noyau qui ne dépend que de la forme de la pupille.}
+  Soit $P\subset\RR^2$ la pupille, symétrique ($P=-P$). L'image physique $v$ formée à travers $P$ est donnée par
+  \[
+    v=K_{\mathrm{diff}}*u,\qquad
+    K_{\mathrm{diff}}(x)=\frac{1}{2f^2}\,\Bigl|\iint_P\exp\Bigl(\frac{2i\pi\ps{x}{\xi}}{\lambda f}\Bigr)\dd\xi\Bigr|^2,
+  \]
+  où $u$ est l'image géométrique, $f$ la distance focale et $\lambda$ la longueur d'onde.
+\end{theorem}
+
+\begin{remark}
+  Si $u=\delta_0$ (point lumineux idéal), alors $v=K_{\mathrm{diff}}$ : c'est la \emph{tache optique} (\emph{point spread function}), déterminée par la pupille $P$.
+\end{remark}
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.75\linewidth]{figures/lec01/fig-lens-diffraction}
+  \caption{Formation de l'image à travers une lentille : les rayons issus de $M$ qui traversent la pupille (de diamètre $D$) convergent en $p$. Encadré : la pupille $P$.}\label{fig:lens-diffraction}
+\end{figure}
+
+\subsubsection*{Pupille circulaire}
+\begin{definition}[Fonction de Bessel de première espèce]\label{def:bessel}
+  Pour $m\in\ZZ$ et $t\in\RR$,
+  \[
+    J_m(t)=\frac{1}{\pi}\int_0^{\pi}\cos(m\theta-t\sin\theta)\dd\theta .
+  \]
+\end{definition}
+
+\begin{lemma}\label{lem:bessel-deriv}
+  Pour tout $m\in\ZZ$, $\dfrac{\dd}{\dd t}\bigl(t^mJ_m(t)\bigr)=t^mJ_{m-1}(t)$.
+\end{lemma}
+
+\begin{proposition}[Tache d'Airy]\label{prop:airy}
+  \simple{Pour une pupille ronde, le flou est radial : un disque central entouré d'anneaux de plus en plus faibles.}
+  Si $P$ est le disque de centre $0$ et de diamètre $D$, alors pour $x\neq0$
+  \[
+    K_{\mathrm{diff}}(x)=\frac{\pi^2D^4}{32f^2}\Bigl(\frac{2J_1(r)}{r}\Bigr)^2,\qquad r=\frac{\pi D}{\lambda f}\abs{x},
+  \]
+  et $K_{\mathrm{diff}}(0)=\pi^2D^4/(32f^2)$, valeur limite de la formule car $2J_1(r)/r\to1$ quand $r\to0$.
+\end{proposition}
+
+\begin{proof}
+  \emph{Étape 1 : invariance par rotation.} Soit $R$ une rotation. Comme $\ps{Rx}{R\xi}=\ps{x}{\xi}$ et $RP=P$ (disque centré en $0$), le changement de variable $\xi=R\eta$ donne $K_{\mathrm{diff}}(Rx)=K_{\mathrm{diff}}(x)$. On se ramène donc à $x=(0,\abs{x})$.
+
+  \emph{Étape 2 : coordonnées polaires.} Avec $\xi=(\rho\cos\theta,\rho\sin\theta)$ on a $\ps{x}{\xi}=\abs{x}\rho\sin\theta$. La partie imaginaire est impaire en $\theta$ et s'annule ; il reste
+  \[
+    \iint_P e^{2i\pi\ps{x}{\xi}/(\lambda f)}\dd\xi
+    =\int_0^{D/2}\!\!\int_{0}^{\pi}2\cos\Bigl(\frac{2\pi\abs{x}\rho\sin\theta}{\lambda f}\Bigr)\dd\theta\,\rho\dd\rho
+    =\int_0^{D/2}2\pi J_0\Bigl(\frac{2\pi\abs{x}\rho}{\lambda f}\Bigr)\rho\dd\rho ,
+  \]
+  d'où $K_{\mathrm{diff}}(x)=\dfrac{2\pi^2}{f^2}\Bigl(\displaystyle\int_0^{D/2}J_0\bigl(\tfrac{2\pi\abs{x}\rho}{\lambda f}\bigr)\rho\dd\rho\Bigr)^2$.
+
+  \emph{Étape 3 : changement de variable.} Posons $t=2\pi\abs{x}\rho/(\lambda f)$, donc $\rho\dd\rho=\bigl(\tfrac{\lambda f}{2\pi\abs{x}}\bigr)^2t\dd t$ et la borne supérieure devient $r=\pi\abs{x}D/(\lambda f)$ :
+  \[
+    K_{\mathrm{diff}}(x)=\frac{2\pi^2}{f^2}\Bigl(\frac{\lambda f}{2\pi\abs{x}}\Bigr)^4\Bigl(\int_0^{r}tJ_0(t)\dd t\Bigr)^2 .
+  \]
+
+  \emph{Étape 4 : primitive.} Par le lemme~\ref{lem:bessel-deriv} avec $m=1$, $\int_0^r tJ_0(t)\dd t=\bigl[tJ_1(t)\bigr]_0^r=rJ_1(r)$, d'où
+  \[
+    K_{\mathrm{diff}}(x)=\frac{\lambda^4f^2}{8\pi^2\abs{x}^4}\,r^2J_1(r)^2 .
+  \]
+
+  \emph{Étape 5 : variable $r$.} Avec $\abs{x}=\lambda f\,r/(\pi D)$, on obtient $K_{\mathrm{diff}}(x)=\dfrac{\pi^2D^4}{8f^2}\dfrac{J_1(r)^2}{r^2}=\dfrac{\pi^2D^4}{32f^2}\Bigl(\dfrac{2J_1(r)}{r}\Bigr)^2$.
+  Enfin $K_{\mathrm{diff}}(0)=\dfrac{1}{2f^2}\bigl(\tfrac{\pi D^2}{4}\bigr)^2=\dfrac{\pi^2D^4}{32f^2}$ (aire du disque au carré).
+\end{proof}
+
+\begin{figure}[!htb]\centering
+  \includesvg[inkscapelatex=false,width=0.85\linewidth]{figures/lec01/fig-airy-profile}
+  \caption{Profil radial de la tache d'Airy : $(2J_1(r)/r)^2$, avec $2J_1(r)/r$ prolongé par $1$ en $r=0$.}\label{fig:airy-profile}
+\end{figure}
+
+\begin{definition}[Rayon d'Airy]\label{def:rayon-airy}
+  \simple{Le rayon du premier anneau sombre : deux points plus proches que $r_a$ se confondent.}
+  Le premier zéro de $r\mapsto2J_1(r)/r$ est $j_{1,1}\simeq3{,}83\simeq1{,}22\,\pi$. Le \emph{rayon d'Airy} $r_a$ est le rayon correspondant dans le plan image :
+  \[
+    \frac{\pi D}{\lambda f}\,r_a=1{,}22\,\pi\quad\Longrightarrow\quad r_a\simeq1{,}22\,\frac{\lambda f}{D}.
+  \]
+\end{definition}
+
+Le rayon $r_a$ mesure la \og résolution\fg{} de l'instrument.
+\side{$f/D$ : nombre d'ouverture ?.}

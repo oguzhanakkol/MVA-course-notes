@@ -1,0 +1,33 @@
+\documentclass[11pt,twoside]{article}
+\input{preamble}
+\input{macros}
+
+\begin{document}
+
+\newgeometry{a4paper,left=25mm,right=25mm,top=24mm,bottom=22mm,
+             headheight=14pt,headsep=7mm}
+\thispagestyle{empty}
+\begin{center}
+  \includesvg[height=18mm]{figures/logo.svg}\par
+  \vspace{12mm}
+  {\Huge\bfseries Sub-pixel Image Processing\par}
+  \vspace{4mm}
+  {\Large Notes de cours\par}
+  \vspace{10mm}
+  {\large Oguzhan Recep Akkol\par}
+  \vspace{1.5mm}
+  {\normalsize MVA 2026--2027 \quad | \quad Cours de L.\ Moisan\par}
+  \vspace{16mm}
+
+  \includegraphics[width=0.7\textwidth,height=110mm,keepaspectratio]{figures/cover_nipy_spectral.png}\par
+\end{center}
+\clearpage
+\thispagestyle{empty}
+\tableofcontents
+\restoregeometry
+
+\mruletrue
+
+\input{lectures/lec01}
+
+\end{document}

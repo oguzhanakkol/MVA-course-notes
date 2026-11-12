@@ -1,0 +1,28 @@
+% Drop-in replacement for the `svg` package, so that Tectonic can compile without Inkscape.
+% The Makefile converts every figures/**/*.svg to build/svg/figures/**/*.pdf with rsvg-convert;
+% \includesvg then simply includes that PDF.
+\ProvidesPackage{svg}[2026/01/01 local shim for the svg package]
+\RequirePackage{graphicx}
+\makeatletter
+\newread\svg@in
+\def\svg@strip#1.svg#2\@nil{#1}
+\define@key{svgshim}{width}{\def\svg@w{width=#1,}}
+\define@key{svgshim}{height}{\def\svg@h{height=#1,}}
+\define@key{svgshim}{inkscapelatex}{}
+\define@key{svgshim}{inkscapearea}{}
+\define@key{svgshim}{inkscapedpi}{}
+\newcommand\setsvg[1]{}
+\newcommand\svgsetup[1]{}
+\newcommand\svgpath[1]{}
+\newcommand\includesvg[2][]{%
+  {\def\svg@w{}\def\svg@h{}\setkeys{svgshim}{#1}%
+   \edef\svg@file{\svg@strip#2.svg.svg\@nil}%
+   \edef\svg@opts{\svg@w\svg@h}%
+   \edef\svg@path{build/svg/\svg@file.pdf}%
+   \openin\svg@in=\svg@path\relax
+   \ifeof\svg@in % not found: path is relative to \svgpath{{figures/}}
+     \edef\svg@path{build/svg/figures/\svg@file.pdf}%
+   \else\closein\svg@in\fi
+   \edef\svg@call{\noexpand\includegraphics[\svg@opts]{\svg@path}}\svg@call}}
+\makeatother
+\endinput
