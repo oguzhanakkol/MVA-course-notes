@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="24" fill="#111"><defs><pattern id="h" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(55)"><line x1="0" y1="0" x2="0" y2="12" stroke="#111" stroke-width="1.8"/></pattern></defs>
+<g fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+<rect x="70" y="40" width="360" height="340"/>
+<rect x="125" y="115" width="250" height="190" fill="url(#h)"/>
+<path d="M250 400V20"/><path d="M240 36L250 18L260 36"/><path d="M40 210H460"/><path d="M444 200L462 210L444 220"/>
+</g><g font-style="italic"><text x="440" y="30">π/δ</text><text x="22" y="400">−π/δ</text></g></svg>

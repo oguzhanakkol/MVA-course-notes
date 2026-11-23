@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 220" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#111"><g fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="80" cy="90" rx="26" ry="20"/><ellipse cx="92" cy="90" rx="26" ry="20"/><ellipse cx="86" cy="90" rx="12" ry="10" stroke-width="1"/>
+<rect x="260" y="40" width="200" height="100"/><path d="M260 40L282 58M460 40L438 58M260 140L282 122M460 140L438 122" stroke-width="3"/>
+<path d="M280 56L260 56M440 56L460 56M280 124L260 124M440 124L460 124" stroke-width="1.5"/>
+<path d="M590 40 Q690 52 790 40 Q780 90 790 140 Q690 128 590 140 Q600 90 590 40Z"/>
+<path d="M850 25L870 75M870 25L852 80M840 52L882 52M860 30L862 78" stroke-width="2.4"/>
+</g><g fill="#111" stroke="none"><circle cx="360" cy="90" r="3"/></g><g text-anchor="middle">
+<text x="86" y="150" font-style="italic">chromatique</text><text x="360" y="178" font-style="italic">vignettage</text>
+<text x="690" y="178" font-style="italic">non légendé</text><text x="870" y="130" font-style="italic">tache étoilée</text></g></svg>

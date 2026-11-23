@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 540" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#111">
+<defs><pattern id="h" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(60)"><line x1="0" y1="0" x2="0" y2="9" stroke="#111" stroke-width="1.6"/></pattern></defs>
+<g fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+<path d="M80 440L80 90"/><path d="M70 104L80 88L90 104"/>
+<path d="M80 440L560 440"/><path d="M546 430L562 440L546 450"/>
+<path d="M80 440 C130 436 170 410 230 360 S330 230 390 190 C430 165 480 158 540 158" />
+<path d="M80 440L450 130" stroke-dasharray="10 12" stroke-width="1.8"/>
+<path d="M170 440L170 330" stroke-width="2"/><path d="M360 440L360 150" stroke-width="2"/>
+<path d="M190 420 Q260 432 340 414" />
+<path d="M100 455L90 465" />
+<rect x="680" y="70" width="270" height="270"/>
+<path d="M770 70V340M860 70V340M680 160H950M680 250H950"/>
+<path d="M770 160H860V250H770Z" fill="url(#h)" stroke-width="1.5"/>
+<path d="M770 160L770 110M860 160L860 110" stroke="none"/>
+<path d="M785 160V120H845V160M785 250V285H845V250" fill="url(#h)" stroke-width="1.4"/><path d="M770 175H725V235H770M860 175H905V235H860" fill="url(#h)" stroke-width="1.4"/>
+<path d="M860 440H1090M980 380V490"/><path d="M860 452 L860 446.0 L870 456.3 L880 442.5 L890 452.8 L900 439.0 L910 449.3 L920 435.6 L930 445.8 L940 432.1 L950 442.3 L960 428.6 L970 438.9 L980 425.1 L990 435.4 L1000 421.7 L1010 431.9 L1020 418.2 L1030 428.4 L1040 414.7 L1050 425.0 L1060 411.2 L1070 421.5 L1080 407.7 L1090 418.0" stroke-width="2.4"/>
+</g>
+<g font-style="italic">
+<text x="40" y="52">intensité</text><text x="40" y="78">mesurée</text>
+<text x="590" y="432">intensité</text><text x="590" y="458">incidente</text>
+<text x="450" y="130" dx="0" transform="translate(60,-12)">saturation</text>
+<text x="205" y="404" font-size="20">zone linéaire</text>
+<text x="96" y="480">↖ basse</text><text x="112" y="506">lumière</text>
+<text x="715" y="385">blooming</text><text x="925" y="520" text-anchor="end">(non légendé)</text>
+</g></svg>

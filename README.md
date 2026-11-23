@@ -23,7 +23,7 @@ Notes are written in French. 7 lectures in total. Official course page: <https:/
 | Done | Lecture | Date | Source |
 |---|---|---|---|
 | [x] | 1 | 2 October 2026 | `lectures/lec01.tex` |
-| [ ] | 2 | | `lectures/lec02.tex` |
+| [x] | 2 | 23 October 2026 | `lectures/lec02.tex` |
 | [ ] | 3 | | `lectures/lec03.tex` |
 | [ ] | 4 | | `lectures/lec04.tex` |
 | [ ] | 5 | | `lectures/lec05.tex` |

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -20 1580 1040" width="1580" height="1040" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="42" fill="#111">
+<defs>
+<marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<g fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<line x1="40" y1="410" x2="1090" y2="410" marker-end="url(#a)"/>
+<line x1="455" y1="735" x2="455" y2="143" marker-start="url(#a)" marker-end="url(#a)"/>
+<line x1="95" y1="170" x2="95" y2="690"/>
+<path d="M178.0 170.0 L180.0 179.5 L179.8 189.0 L177.7 198.5 L175.9 208.0 L176.4 217.5 L178.7 227.0 L180.2 236.5 L179.3 246.0 L177.0 255.5 L175.8 265.0 L177.0 274.5 L179.3 284.0 L180.2 293.5 L178.7 303.0 L176.4 312.5 L175.9 322.0 L177.7 331.5 L179.8 341.0 L180.0 350.5 L178.0 360.0 L176.0 369.5 L176.2 379.0 L178.4 388.5 L180.1 398.0 L179.5 407.5 L177.3 417.0 L175.8 426.5 L176.7 436.0 L179.0 445.5 L180.2 455.0 L179.0 464.5 L176.7 474.0 L175.8 483.5 L177.4 493.0 L179.6 502.5 L180.1 512.0 L178.3 521.5 L176.2 531.0 L176.1 540.5 L178.0 550.0 L180.0 559.5 L179.8 569.0 L177.6 578.5 L175.9 588.0 L176.5 597.5 L178.7 607.0 L180.2 616.5 L179.3 626.0 L177.0 635.5 L175.8 645.0 L177.0 654.5 L179.3 664.0 L180.2 673.5 L178.6 683.0 L176.4 692.5 L175.9 702.0 L177.7 711.5 L179.8 721.0 L179.9 730.5 L177.9 740.0 L176.0 749.5 L176.3 759.0 L178.4 768.5 L180.1 778.0 L179.5 787.5 L177.3 797.0 L175.8 806.5 L176.8 816.0 L179.1 825.5 L180.2 835.0 L178.9 844.5 L176.7 854.0 L175.8 863.5 L177.4 873.0 L179.6 882.5 L180.1 892.0 L178.3 901.5 L176.2 911.0 L176.1 920.5 L178.1 930.0"/>
+<line x1="274.3" y1="185" x2="274.3" y2="715" stroke-dasharray="40 38" stroke-width="2"/>
+<line x1="818" y1="236" x2="818" y2="410"/>
+<line x1="455" y1="236" x2="818" y2="236"/>
+<line x1="455" y1="236" x2="95.0" y2="582.6"/>
+<line x1="818" y1="236" x2="95.0" y2="582.6" stroke-width="2.4"/>
+<line x1="818" y1="236" x2="455" y2="584"/>
+<line x1="455" y1="584" x2="95.0" y2="582.6"/>
+<line x1="455" y1="148" x2="818" y2="236" stroke-dasharray="3 14" stroke-width="3.4"/>
+<line x1="805" y1="250" x2="770" y2="292" stroke-dasharray="3 12" stroke-width="3.4"/>
+<line x1="690" y1="425" x2="463" y2="728" stroke-dasharray="26 22" stroke-width="2.4"/>
+<path d="M728 190 Q735 140 772 118" marker-end="url(#a)" stroke-width="2.4"/>
+<path d="M107 276 L157 276" marker-end="url(#a)" stroke-width="3"/>
+<g stroke-width="2.4"><path d="M318.2 408.5 L318.1 405.9 L317.8 403.4 L317.3 400.9 L316.7 398.4 L315.9 395.9 L315.1 393.5 L314.0 391.2 L312.9 388.9 L311.6 386.7 L310.2 384.6 L308.6 382.6 L307.0 380.6"/><path d="M330.2 408.0 L330.0 404.8 L329.6 401.6 L329.0 398.4 L328.3 395.2 L327.3 392.1 L326.2 389.1 L324.9 386.1 L323.4 383.2 L321.8 380.4 L320.0 377.7 L318.0 375.1 L315.9 372.6"/><path d="M230.3 411.5 L230.4 414.1 L230.8 416.6 L231.2 419.1 L231.8 421.6 L232.6 424.1 L233.4 426.5 L234.5 428.8 L235.6 431.1 L236.9 433.3 L238.3 435.4 L239.9 437.4 L241.5 439.4"/><path d="M218.3 412.0 L218.5 415.2 L218.9 418.4 L219.5 421.6 L220.2 424.8 L221.2 427.9 L222.3 430.9 L223.6 433.9 L225.1 436.8 L226.7 439.6 L228.5 442.3 L230.5 444.9 L232.6 447.4"/></g>
+<g stroke-width="3.2"><line x1="168" y1="503" x2="190" y2="503"/><line x1="168" y1="514" x2="190" y2="514"/><line x1="168" y1="526" x2="190" y2="526"/><line x1="168" y1="537" x2="190" y2="537"/><line x1="168" y1="549" x2="190" y2="549"/><line x1="168" y1="560" x2="190" y2="560"/><line x1="168" y1="571" x2="190" y2="571"/><line x1="168" y1="583" x2="190" y2="583"/></g>
+<line x1="274.3" y1="397" x2="274.3" y2="423" stroke-width="2.4"/>
+<line x1="365" y1="403" x2="365" y2="417" stroke-width="2.4"/>
+<line x1="525" y1="403" x2="525" y2="417" stroke-width="2.4"/>
+</g>
+<circle cx="95.0" cy="582.6" r="6" fill="#111"/>
+<circle cx="818" cy="236" r="6" fill="#111"/>
+<g font-style="italic">
+<text x="500" y="108">X(Y)</text>
+<text x="838" y="335">X</text>
+<text x="412" y="340" text-anchor="end">X</text>
+<text x="65" y="510" text-anchor="middle">x</text>
+<text x="357" y="460">t</text>
+<text x="517" y="388">t</text>
+<text x="690" y="458">z</text>
+<text x="1080" y="458">z</text>
+<text x="838" y="236" font-style="normal">M</text>
+<text x="129" y="248">δ</text>
+</g>
+<text x="67" y="404" text-anchor="end">−t</text>
+<text x="250" y="384" text-anchor="end">−f</text>
+<text x="226" y="112">plan</text>
+<text x="240" y="156">focal</text>
+<text x="1110" y="396">axe optique</text>
+<text x="822" y="34">borner</text>
+<text x="822" y="82">la lumière</text>
+<text x="50" y="775" text-anchor="middle">plan de</text>
+<text x="50" y="830" text-anchor="middle">focalisation</text>
+<text x="215" y="992" text-anchor="middle">Capteur</text>
+</svg>

@@ -1,0 +1,399 @@
+\lecture{23 octobre 2026}{Échantillonnage de Shannon et effets d'aliasing}
+
+\begin{enumerate}[label=\arabic*)]
+  \item TF
+  \item Diffraction
+  \item Défocalisation
+\end{enumerate}
+
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=\linewidth]{lec02/axe-optique}
+\end{figure}
+
+\[
+  \frac Xf=\frac{x}{t-f}
+  \qquad\text{et}\qquad
+  \frac Xz=\frac xt
+\]
+\[
+  \frac xX=\frac{t-f}{f}=\frac tz
+\]
+\[
+  \frac tf-1=\frac tz
+  \qquad\qquad
+  \frac1f-\frac1t=\frac1z
+\]
+\[
+  \boxed{\frac1t+\frac1z=\frac1f}
+\]
+
+Pour une source ponctuelle située en $(X,Y,Z)$, la tache optique associée à une défocalisation de $\delta$ est
+\[
+  K_{\mathrm{defocus}}(x)=\mathbf{1}_{B\left(0,\frac D2\frac\delta f\right)}(x)\cdot\mathrm{cte},
+  \qquad
+  \mathrm{cte}=\frac{1}{\pi\left(\frac{D\delta}{2F}\right)^{2}}
+\]
+(sans prendre en compte la diffraction).
+\prof{$K_{\mathrm{defocus}}$ est proportionnelle à $\mathbf{1}_{\mathrm{pupille}}(fx/\delta)$, c'est-à-dire que la forme de la tache est celle de la pupille (disque, hexagone, bokeh).}
+
+Si la scène est située sur un seul plan $z$, l'image formée est
+\[
+  v=\underbrace{K_{\mathrm{diffraction}}\star K_{\mathrm{defocus}}}_{\text{tache optique}}\star u
+\]
+où $u$ est l'image géométrique.
+
+\begin{remark}
+  $K_{\mathrm{defocus}}$ est une approximation géométrique, modèle plus précis:
+  \[
+    K(x)=\frac{1}{2f^{2}}
+    \left|\iint_{\mathrm{pupille}}
+      e^{\frac{2i\pi\ps{x}{\xi}}{\lambda f}}\cdot
+      e^{\frac{2i\pi}{\lambda}D\frac{|\xi|^{2}}{2}}\,\mathrm{d}\xi\right|^{2}
+  \]
+  où $D=\frac1F+\frac1z-\frac1f$, et alors $v=K\star u$.
+\end{remark}
+
+\subsection{Autres distorsions}
+ 
+\begin{itemize}
+  \item aberrations chromatiques\simple{\textbf{Chromatique:} l'indice du verre dépend de $\lambda$, donc la focale varie avec la couleur (franges colorées).}
+  \item astigmatisme, coma, aberration sphérique\simple{\textbf{Astigmatisme:} foyers différents selon deux directions (hors axe). \textbf{Coma:} un point hors axe devient une comète. \textbf{Sphérique:} les rayons périphériques focalisent plus près, d'où un flou.}
+  \item vignettage\simple{\textbf{Vignettage:} coins plus sombres, les rayons obliques sont partiellement bloqués par la monture.}
+\end{itemize}
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=\linewidth]{lec02/distorsions}
+\end{figure}
+ 
+\subsection{Digitalisation (numérisation)}
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=\linewidth]{lec02/capteur-grille}
+\end{figure}
+ 
+Taille du pixel $c\le\delta$ ; l'image numérique (tableau de pixels) est\simple{\textbf{Motif de Bayer:} filtres colorés R, G, B devant le capteur (2 G, 1 R, 1 B par bloc $2\times2$). Chaque pixel ne mesure qu'une couleur ; le démosaïquage interpole les deux autres.}
+\[
+  I_{kl}=\iint_{C} v(k\delta-x,\,l\delta-y)\,\mathrm{d}x\,\mathrm{d}y,
+  \qquad
+  C=\left[-\tfrac c2,\tfrac c2\right]^{2}
+\]
+\[
+  I_{kl}=\underbrace{(v\star\mathbf{1}_C)}_{\text{intégration due au capteur}}
+  \underbrace{(k\delta,\,l\delta)}_{\text{échantillonnage}}
+\]
+
+\subsection{Distorsions}
+ 
+\begin{itemize}
+  \item non-linéarité
+\end{itemize}
+\[
+  I_{kl}=g\big((v\star\mathbf{1}_C)(k\delta,l\delta)\big)
+\]
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=\linewidth]{lec02/non-linearite}
+\end{figure}
+
+\simple{$I_{kl}$ est la lumière recueillie sur la surface du pixel. $v$ inclut déjà diffraction et défocalisation ($v=K\star u$). Avec le filtre de Bayer, chaque pixel n'intègre qu'une couleur (R, G ou B).}
+ 
+\begin{enumerate}[label=\textcircled{\arabic*}]
+  \item bruit (bruit quantique) : pour une intensité $\lambda>0$ et un temps $t$, le nombre $N$ de photons suit $N\sim\mathcal{P}(\lambda t)$:
+  \[
+    \mathbb{P}(N=k)=e^{-\lambda t}\frac{(\lambda t)^{k}}{k!},
+    \qquad
+    \mathbb{E}(N)=\lambda t,
+    \qquad
+    \mathrm{Var}(N)=\lambda t,
+  \]
+  \[
+    \frac{\sqrt{\mathrm{Var}(N)}}{\mathbb{E}(N)}
+    =\frac{\sqrt{\lambda t}}{\lambda t}
+    =\frac{1}{\sqrt{\lambda t}}
+    \xrightarrow[\lambda t\to\infty]{}0.
+  \]
+\end{enumerate}
+
+
+\begin{enumerate}[label=\textcircled{\arabic*},start=2]
+  \item bruit électronique, bruit thermique, etc.
+\end{enumerate}
+Modèle classique :
+\[
+  I'_{kl}=I_{kl}+N_{kl},
+  \qquad
+  N_{kl}\sim\mathcal{N}(0,\sigma^{2}),
+  \quad N_{kl}\ \text{i.i.d.}
+\]
+modèle de bruit additif gaussien.
+
+\simple{Que les photons suivent une loi de Poisson : voir Mandel \& Wolf, \emph{Optical Coherence and Quantum Optics} ; Goodman, \emph{Statistical Optics} ; Foi et al., IEEE TIP 2008 (hors poly).}
+
+\textcircled{1}\,+\,\textcircled{2} :
+\[
+  I'_{kl}=I_{kl}+N_{kl},
+  \qquad
+  N_{kl}\sim\mathcal{N}\big(0,\sigma^{2}+\underbrace{I_{kl}}_{\text{bruit quantique}}\big)
+\]
+
+\prof{Le bruit quantique n'est important qu'en basse lumière.}
+\simple{Exemple : à $\lambda t=100$ photons le bruit relatif vaut $10\,\%$ (photo de nuit, grain visible) ; à $\lambda t=10^{4}$ il vaut $1\,\%$ (plein jour ou pose longue, image lisse).}
+
+\begin{itemize}
+  \item \underline{quantification} :
+\end{itemize}
+\[
+  I_{kl}=f\big((v\star\mathbf{1}_C)(k\delta,l\delta)\big),
+  \qquad
+  f(t)=E\!\left(\frac tq\right).
+\]
+ 
+\begin{figure}[!h]\centering
+  \begin{minipage}[c]{.48\linewidth}\centering
+    \includesvg[inkscapelatex=false,width=\linewidth]{lec02/quantification}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.36\linewidth}\centering
+    \includesvg[inkscapelatex=false,width=\linewidth]{lec02/spectre-bande}
+  \end{minipage}
+\end{figure}
+\simple{\textbf{Gauche :} le capteur arrondit la valeur mesurée au niveau entier inférieur (pas $q$), d'où l'escalier. \textbf{Droite :} le carré est le plan des fréquences, de côté $2\pi/\delta$ ; le rectangle hachuré est le spectre de l'image, entièrement à l'intérieur, donc sans repliement.}
+ 
+\[
+  v=\underbrace{\big(K_{\mathrm{diffraction}}\star K_{\mathrm{defocus}}\star K_{\mathrm{capteur}}\big)}_{K_{\mathrm{capteur}}=\mathbf{1}_C}\star u
+  \qquad\qquad
+  u\ :\ \text{image géométrique}
+\]
+\[
+  I_{kl}=\underbrace{v(k\delta,l\delta)}_{\text{échantillonnage}}+N_{kl}
+  \qquad\qquad
+  N_{kl}\ :\ \text{bruit}
+\]
+bruit $\to$ Poisson, gaussien i.i.d., + compliqué.
+
+\subsection{Échantillonnage idéal}
+ 
+\begin{theorem}[Shannon (Nyquist--Whittaker)]
+  Soit $f\in\mathcal{S}(\mathbb{R}^2)$ et $\delta>0$ tels que $\operatorname{supp}\hat f\subset\left[-\frac\pi\delta,\frac\pi\delta\right]^{2}$. Alors
+  \[
+    \forall (x,y)\in\mathbb{R}^2,\qquad
+    f(x,y)=\sum_{(k,l)\in\mathbb{Z}^2}f(k\delta,l\delta)\,
+    \operatorname{sinc}\!\left(\frac x\delta-k\right)\operatorname{sinc}\!\left(\frac y\delta-l\right),
+  \]
+  où
+  \[
+    \operatorname{sinc}(t)=\begin{cases}\dfrac{\sin\pi t}{\pi t} & \text{si } t\neq0,\\[2mm] 1 & \text{si } t=0.\end{cases}
+  \]
+\end{theorem}
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=.8\linewidth]{lec02/sinc}
+\end{figure}
+ 
+\begin{proof}[Preuve pour $\delta=1$]
+  On suppose $\operatorname{supp}\hat f\subset[-\pi,\pi]^2$. Soit $(x,y)\in\mathbb{R}^2$. Comme $\hat f\in\mathcal{S}\subset L^1$, $f=\mathcal{F}^{-1}(\mathcal{F}(f))$ :
+  \[
+    f(x,y)=\frac1{(2\pi)^2}\iint_{[-\pi,\pi]^2}e^{+i(\alpha x+\beta y)}\,\hat f(\alpha,\beta)\,\mathrm{d}\alpha\,\mathrm{d}\beta,
+    \qquad
+    \hat f(\alpha,\beta)=F(\alpha,\beta)\ \text{sur }[-\pi,\pi]^2,
+  \]
+  où $F:\mathbb{R}^2\to\mathbb{C}$ est la $(2\pi,2\pi)$-périodisée de $\hat f$. $F$ est $C^\infty$ ($F^{(k)}=0$ en tout point frontière d'un carré, $F$ périodique).\simple{On n'échantillonne pas $\hat f$ : on la périodise pour pouvoir écrire une série de Fourier. $F$ est lisse car $\hat f$ s'annule au bord avec toutes ses dérivées.}
+ 
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=.6\linewidth]{lec02/periodisation-spectre}
+  \end{figure}
+ 
+  Pour tous $\alpha,\beta$,
+  \[
+    F(\alpha,\beta)=\sum_{(k,l)\in\mathbb{Z}^2}c_{k,l}\,e^{i(\alpha k+\beta l)},
+  \]
+  où\simple{Les échantillons de $f$ sont exactement les coefficients de Fourier de $\hat f$ : c'est le lien entre échantillonnage et spectre.}
+  \[
+    c_{k,l}=\frac1{(2\pi)^2}\iint_{[-\pi,\pi]^2}e^{+i(sk+tl)}\,\hat f(s,t)\,\mathrm{d}s\,\mathrm{d}t=f(-k,-l).
+  \]
+
+  Donc, pour tout $(x,y)\in\mathbb{R}^2$,
+  \[
+    f(x,y)=\frac1{(2\pi)^2}\iint_{[-\pi,\pi]^2}e^{i(\alpha x+\beta y)}
+    \Bigg(\sum_{(k,l)\in\mathbb{Z}^2}f(k,l)\,e^{-i(\alpha k+\beta l)}\Bigg)\mathrm{d}\alpha\,\mathrm{d}\beta.
+  \]
+  Par Fubini,
+  \begin{align*}
+    f(x,y)&=\sum_{(k,l)\in\mathbb{Z}^2}f(k,l)\,\frac1{(2\pi)^2}\iint_{[-\pi,\pi]^2}e^{i\alpha(x-k)+i\beta(y-l)}\,\mathrm{d}\alpha\,\mathrm{d}\beta\\
+    &=\sum_{(k,l)\in\mathbb{Z}^2}f(k,l)\,
+    \underbrace{\frac1{2\pi}\int_{-\pi}^{\pi}e^{i\alpha(x-k)}\,\mathrm{d}\alpha}_{\operatorname{sinc}(x-k)}\cdot
+    \underbrace{\frac1{2\pi}\int_{-\pi}^{\pi}e^{i\beta(y-l)}\,\mathrm{d}\beta}_{\operatorname{sinc}(y-l)}.
+  \end{align*}
+  Pour $t\neq0$,\simple{Le sinc est la transformée inverse de la boîte $\mathbf{1}_{[-\pi,\pi]}$ : il apparaît en intégrant l'exponentielle sur la bande.}
+  \[
+    \frac1{2\pi}\int_{-\pi}^{\pi}e^{i\alpha t}\,\mathrm{d}\alpha
+    =\frac1{2\pi}\left[\frac{e^{i\alpha t}}{it}\right]_{-\pi}^{\pi}
+    =\frac{e^{i\pi t}-e^{-i\pi t}}{2\pi it}
+    =\frac{\sin\pi t}{\pi t}=\operatorname{sinc}(t).
+  \]
+ 
+  Pour $\delta>0$ quelconque, on pose $g(x)=f(\delta x)$\simple{Changement d'échelle : on se ramène au pas $1$.} :
+  \[
+    \Rightarrow\ \hat g(\xi)=\left(\frac1\delta\right)^{2}\hat f\!\left(\frac1\delta\xi\right),
+    \qquad
+    f(k\delta)\longleftrightarrow g(k).
+  \]
+  $\operatorname{supp}\hat f\subset\left[-\frac\pi\delta,\frac\pi\delta\right]^2\Rightarrow\operatorname{supp}\hat g\subset[-\pi,\pi]^2\Rightarrow$ le théorème est vrai pour $g$ avec $\delta=1$. (À écrire explicitement.)
+\end{proof}
+ 
+\begin{proof}[Preuve n2]\simple{Idée : échantillonner = multiplier par un peigne $\Rightarrow$ le spectre est périodisé $\Rightarrow$ une boîte (passe-bas idéal) isole la copie centrale $\Rightarrow$ en espace, c'est une convolution par le sinc.}
+  \textbf{(1D)} Distribution de Dirac en $\alpha$, notée $\delta_\alpha$.\simple{Un Dirac est une masse $1$ concentrée en un point : le convoluer translate la fonction.}
+  Intuition : $\delta_\alpha(\alpha)=+\infty$, $\delta_\alpha(x)=0$ si $x\neq\alpha$, $\int\delta_\alpha=1$.
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=.25\linewidth]{lec02/dirac}
+  \end{figure}
+  Pour une fonction $f$ :
+  \[
+    \int_{\mathbb{R}}f(t)\,\underbrace{\delta_\alpha(t)}_{\text{écriture abusive}}\mathrm{d}t
+    =\int_{\mathbb{R}}f(\alpha)\,\delta_\alpha(t)\,\mathrm{d}t
+    =f(\alpha)\int_{\mathbb{R}}\delta_\alpha=f(\alpha).
+  \]
+  \textbf{(2D)}
+  \begin{align*}
+    (\delta_{\alpha,\beta}\star\varphi)(x,y)&=\iint\delta_{\alpha,\beta}(u,v)\,\varphi(x-u,y-v)\,\mathrm{d}u\,\mathrm{d}v\\
+    &=\varphi(x-\alpha,y-\beta)\underbrace{\iint\delta_{\alpha,\beta}}_{1}=\varphi(x-\alpha,y-\beta),
+  \end{align*}
+  \[
+    \delta_{0,0}\star\varphi=\varphi.
+  \]
+ 
+  \textbf{Peigne de Dirac (2D) (de pas $s$) :}\simple{Multiplier $f$ par le peigne garde ses valeurs aux points $(ks,ls)$ : c'est le modèle mathématique du capteur.}
+  \[
+    \Pi_s=\sum_{(k,l)\in\mathbb{Z}^2}\delta_{ks,ls},
+    \qquad
+    \hat\Pi_s=\left(\frac{2\pi}{s}\right)^{2}\Pi_{2\pi/s}.
+  \]
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=.2\linewidth]{lec02/peigne}
+  \end{figure}
+  \[
+    \boxed{f\cdot\Pi_s}\ \longleftrightarrow\ \text{échantillonner }f\text{ avec un pas }s.
+  \]
+  \[
+    f\cdot\Pi_s=\sum_{(k,l)\in\mathbb{Z}^2}f(ks,ls)\,\delta_{ks,ls}
+    \quad\Longleftrightarrow\quad I_{k,l}=f(ks,ls).
+  \]
+  \begin{align*}
+    (f\star\Pi_s)(x,y)&=\iint\Pi_s(u,v)\,f(x-u,y-v)\,\mathrm{d}u\,\mathrm{d}v\\
+    &=\sum_{(k,l)\in\mathbb{Z}^2}\iint\delta_{ks,ls}(u,v)\,f(x-u,y-v)\,\mathrm{d}u\,\mathrm{d}v\\
+    &=\underbrace{\sum_{(k,l)\in\mathbb{Z}^2}f(x-ks,y-ls)}_{(s,s)\text{-périodisée de }f}.
+  \end{align*}
+  1D, $s=T$ : $\sum_{k\in\mathbb{Z}}f(x-kT)$ est $T$-périodique\simple{Convoluer par le peigne recopie $f$ à chaque nœud.} :
+  \[
+    \sum_{k\in\mathbb{Z}}f(x-kT)=f(x)+f(x-T)+f(x-2T)+f(x+T)+\cdots
+  \]
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=\linewidth]{lec02/periodisation-1d}
+  \end{figure}
+  $\delta=1$,
+  \[
+    \big(\mathcal{F}^{-1}(f)\star\Pi_{2\pi}\big)\cdot\mathbf{1}_{[-\pi,\pi]^2}=\mathcal{F}^{-1}(f),
+  \]
+  où $\mathcal{F}^{-1}(f)\star\Pi_{2\pi}$ est la $2\pi$-périodisée de $\mathcal{F}^{-1}(f)$, et
+  \[
+    \mathcal{F}^{-1}(f)(\xi)=\frac1{(2\pi)^2}\int_{\mathbb{R}^2}f(x)\,e^{i\langle x,\xi\rangle}\,\mathrm{d}x=\frac1{(2\pi)^2}\hat f(-\xi),
+    \qquad
+    \hat f(\xi)=\int_{\mathbb{R}^2}f(x)\,e^{-i\langle x,\xi\rangle}\,\mathrm{d}x.
+  \]
+  
+  $\operatorname{supp}\hat f\subset[-\pi,\pi]^2\Rightarrow\operatorname{supp}\mathcal{F}^{-1}(f)\subset[-\pi,\pi]^2$.\simple{Bande limitée : les copies ne se recouvrent pas. Multiplier par $\mathbf{1}_{[-\pi,\pi]^2}$ garde la copie centrale : c'est un filtre passe-bas idéal.}
+ 
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=.6\linewidth]{lec02/spectre-copies}
+  \end{figure}
+ 
+  En appliquant $\mathcal{F}$ (les constantes $\frac1{(2\pi)^2}$ et $(2\pi)^2$ se simplifient) :
+  \[
+    \underbrace{\mathcal{F}\big(\mathcal{F}^{-1}(f)\star\Pi_{2\pi}\big)}_{f\cdot\left(\frac{2\pi}{2\pi}\right)^{2}\Pi_{\frac{2\pi}{2\pi}}\,=\,f\cdot\Pi_1}
+    \ \cdot\
+    \underbrace{\mathcal{F}\big(\mathbf{1}_{[-\pi,\pi]^2}\big)}_{(x,y)\mapsto\operatorname{sinc}(x)\operatorname{sinc}(y)\cdot(2\pi)^2}=f
+  \]
+
+  $f\cdot\Pi_1=$ échantillonnage de $f$ de pas $1$,\simple{Boîte en fréquence = sinc en espace : on place un sinc, pondéré par la valeur de l'échantillon, en chaque pixel.}
+  \[
+    f=(f\cdot\Pi_1)\star(\operatorname{sinc}\otimes\operatorname{sinc}).
+  \]
+  Pour tous $x,y\in\mathbb{R}^2$,
+  \begin{align*}
+    f(x,y)&=\iint\Bigg(\sum_{(k,l)\in\mathbb{Z}^2}f(k,l)\,\delta_{k,l}\Bigg)(u,v)\,\operatorname{sinc}(x-u)\operatorname{sinc}(y-v)\,\mathrm{d}u\,\mathrm{d}v\\
+    &=\sum_{(k,l)\in\mathbb{Z}^2}f(k,l)\,\operatorname{sinc}(x-k)\operatorname{sinc}(y-l).
+  \end{align*}
+  \begin{figure}[!h]\centering
+    \includesvg[inkscapelatex=false,width=.6\linewidth]{lec02/ellipses}
+  \end{figure}
+\end{proof}
+
+\subsection{Aliasing}
+ 
+\[
+  \underset{\text{échantillonnage}}{f\cdot\Pi_\delta}
+  \ \xrightarrow{\ \mathcal{F}\ }\
+  \frac1{\delta^{2}}\,\hat f\star\Pi_{\frac{2\pi}\delta}
+  \qquad\Big(\tfrac{2\pi}\delta\text{-périodisation}\Big)
+\]
+\simple{Échantillonner revient à périodiser le spectre : des copies de $\hat f$ sont posées côte à côte tous les $2\pi/\delta$.}
+\[
+  g(x,y)=\sum_{(k,l)\in\mathbb{Z}^2}f(k\delta,l\delta)\,
+  \operatorname{sinc}\!\left(\frac x\delta-k\right)\operatorname{sinc}\!\left(\frac y\delta-l\right)
+\]
+\simple{$g$ est l'interpolation de Shannon des échantillons de $f$ : elle est toujours à bande limitée, même si $f$ ne l'est pas.}
+\[
+  \mathcal{F}^{-1}(f)\ \xrightarrow[\ \text{res.}\ ]{\ \cdot\,\mathbf{1}_{\left[-\frac\pi\delta,\frac\pi\delta\right]^2}\ }\ \mathcal{F}^{-1}(g)
+\]
+$f$ et $g$ ont les mêmes échantillons.\simple{Si $\hat f$ dépasse le carré, $g\neq f$ mais les deux donnent les mêmes pixels : l'information hors bande est perdue.}
+ 
+(1D)\simple{Les queues hachurées des copies voisines s'ajoutent au spectre central : les hautes fréquences se replient dans la bande.}
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=.9\linewidth]{lec02/aliasing-1d}
+\end{figure}
+
+\vspace{-0.5cm}
+
+(2D)\simple{Zones hachurées : parties du carré recouvertes par les copies voisines, là où les fréquences se mélangent.}
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=.60\linewidth]{lec02/aliasing-2d}
+\end{figure}
+ 
+Cas d'une onde pure : $k\in\mathbb{R}^2$, $x\in\mathbb{R}^2$.\simple{Une onde pure $\sin\langle k,x\rangle$ a pour spectre deux Diracs en $\pm k$ : c'est le cas le plus simple pour voir le repliement.}
+\[
+  u(x)=\sin(\langle k,x\rangle)=\frac1{(2\pi)^2}\iint\hat u(\xi)\,e^{i\langle x,\xi\rangle}\,\mathrm{d}\xi
+\]
+\[
+  \mathrm{cte}=\frac1{2i}
+  \qquad
+  =\frac{e^{i\langle k,x\rangle}-e^{-i\langle k,x\rangle}}{2i}
+  =\mathrm{cte}\cdot\iint(\delta_k-\delta_{-k})(\xi)\,e^{i\langle x,\xi\rangle}\,\mathrm{d}\xi
+\]
+\[
+  \longrightarrow\quad\hat u(\xi)=\frac{(2\pi)^2}{2i}\,(\delta_k-\delta_{-k})
+\]
+Période $T$, $\|k\|\,T=2\pi$, $T=\dfrac{2\pi}{\|k\|}$.
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=.9\linewidth]{lec02/onde-pure}
+\end{figure}
+ 
+$T'=\dfrac{2\pi}{\|k'\|}>T$,
+\[
+  k'=k-\Big(0,\frac{2\pi}\delta\Big)
+\]
+\[
+  v(x)=\sin(\langle k',x\rangle)\ \longleftarrow\ \hat v(\xi)=\frac{(2\pi)^2}{2i}\,(\delta_{k'}-\delta_{-k'})
+\]
+
+\simple{Si $k$ sort du carré, l'onde échantillonnée est identique à une onde plus lente $k'$ (période $T'>T$) : les pixels ne permettent pas de les distinguer.}
+ 
+\textbf{Manifestations de l'aliasing :}
+\begin{enumerate}[label=\arabic*.]
+  \item repliement spectral de textures rayées\simple{Des rayures fines apparaissent comme de larges rayures (moiré).}
+  \item perte de connexité de structures fines\simple{Une ligne plus fine que le pas d'échantillonnage peut se casser en morceaux.}
+  \item bords crénelés\simple{Un bord oblique devient un escalier (effet  "escalier").}
+\end{enumerate}
+ 
+\begin{figure}[!h]\centering
+  \includesvg[inkscapelatex=false,width=.65\linewidth]{lec02/crenelage}
+\end{figure}
